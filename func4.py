@@ -143,12 +143,14 @@ print(func_test())
 # Добавить возможность кэшировать результат функции с аргументами.
 def cache_result(size):
     def decorator(func):
-        cache = None
+        cache = {}
         counter = 0
 
         @wraps(func)
         def wrapper(*args):
             nonlocal cache, counter
+            if not cache.get(args):
+                cache = {args: func(*args)}
             if counter < size:
                 counter += 1
                 return cache
@@ -167,7 +169,7 @@ def func_test(a, b):
     print(f'Count... {a} + {b}')
     return a + b
 
-
+print('________-')
 print(func_test(1, 2))
 print(func_test(1, 2))
 print(func_test(1, 2))
